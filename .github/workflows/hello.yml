@@ -32,3 +32,9 @@ jobs:
           else
             echo "없음 — job이 다르면 러너도 다르다";
           fi
+  job_c:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo ${{ runner.os }} >> $GITHUB_STEP_SUMMARY
+      - run: df -h / >> $GITHUB_STEP_SUMMARY
+          
