@@ -33,3 +33,9 @@ jobs:
       - run: |
           echo "## 산출물 목록" >> "$GITHUB_STEP_SUMMARY"
           find dist -type f | sort >> "$GITHUB_STEP_SUMMARY"      
+  deploy:
+    needs: collect
+    runs-on: ubuntu-latest
+    environment: production        # ← 여기서 승인 대기
+    steps:
+      - run: echo "승인이 나야 이 줄이 실행된다"       
