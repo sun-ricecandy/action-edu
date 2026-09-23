@@ -1,0 +1,21 @@
+name: 앱 빌드
+description: 체크아웃 후 테스트하고 빌드한다
+inputs:
+  build_type:
+    description: Release 또는 Debug
+    required: false
+    default: Release
+outputs:
+  size:
+    description: 산출물 크기(byte)
+    value: ${{ steps.info.outputs.size }}
+runs:
+  using: composite
+  steps:
+    - shell: bash                    # composite step은 shell 필수
+      run: make test
+    - shell: bash
+      run: make BUILD_TYPE=${{ inputs.build_type }}
+    - id: info
+      shell: bash
+      run: echo "size=$(stat -c%s build/app)" >> "$GITHUB_OUTPUT"

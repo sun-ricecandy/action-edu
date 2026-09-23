@@ -1,0 +1,13 @@
+name: Lab5 표준
+on:
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7        # ← 이게 먼저 있어야 액션 파일을 찾을 수 있다
+      - id: b
+        uses: ./.github/actions/build-app
+        with:
+          build_type: Release
+      - run: echo "산출물 크기 ${{ steps.b.outputs.size }} byte"
