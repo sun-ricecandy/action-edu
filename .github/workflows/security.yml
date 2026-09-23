@@ -1,0 +1,15 @@
+name: Lab4 보안
+on:
+  workflow_dispatch:
+
+jobs:
+  masking:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 시크릿을 일부러 출력
+        env:
+          TOK: ${{ secrets.DEMO_TOKEN }}
+        run: |
+          echo "그대로 출력: $TOK"          # → *** 로 가려짐
+          echo "변형 출력:"
+          echo "$TOK" | base64               # → 값이 그대로 새어나옴
