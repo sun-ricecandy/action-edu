@@ -1,0 +1,42 @@
+name: Lab4 외부 저장소 업로드
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - run: make
+      - uses: actions/upload-artifact@v7
+        with:
+          name: app
+          path: build/app
+
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          name: app
+          path: dist
+      - name: Azure Blob에 업로드
+        env:
+          ACCT: ${{ vars.AZ_STORAGE_ACCOUNT }}
+          SAS: ${{ secrets.AZ_SAS }}
+          VERSION: v0.${{ github.run_number }}
+        run: |
+          az storage blob upload-batch \
+            --account-name "$ACCT" --sas-token "$SAS" \
+            --destination firmware --destination-path "$VERSION" \
+            --source dist
+      - name: 올라간 파일 목록을 Summary에
+        env:
+          ACCT: ${{ vars.AZ_STORAGE_ACCOUNT }}
+          SAS: ${{ secrets.AZ_SAS }}
+        run: |
+          echo "## firmware 컨테이너" >> "$GITHUB_STEP_SUMMARY"
+          az storage blob list --container-name firmware \
+            --account-name "$ACCT" --sas-token "$SAS" \
+            --query '[].name' -o tsv | sort >> "$GITHUB_STEP_SUMMARY"
