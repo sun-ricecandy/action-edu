@@ -16,3 +16,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: echo "Release 산출물 크기 ${{ needs.release-build.outputs.size }} byte"
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: 캐시
+        id: cache
+        uses: actions/cache@v4
+        with:
+          path: build
+          key: build-${{ hashFiles('src/**', 'Makefile') }}
+      - name: 빌드
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: make
+      - run: ls -la build    
