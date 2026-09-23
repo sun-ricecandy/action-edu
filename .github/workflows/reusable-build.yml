@@ -1,0 +1,21 @@
+name: 재사용 빌드
+on:
+  workflow_call:
+    inputs:
+      build_type:
+        type: string
+        required: true
+    outputs:
+      size:
+        value: ${{ jobs.build.outputs.size }}
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      size: ${{ steps.b.outputs.size }}
+    steps:
+      - uses: actions/checkout@v7        # 로컬 액션을 쓰려면 여기서도 필요
+      - id: b
+        uses: ./.github/actions/build-app
+        with:
+          build_type: ${{ inputs.build_type }}
