@@ -13,3 +13,13 @@ jobs:
           echo "그대로 출력: $TOK"          # → *** 로 가려짐
           echo "변형 출력:"
           echo "$TOK" | base64               # → 값이 그대로 새어나옴
+  call_api:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 외부 시스템 호출
+        env:
+          TOK: ${{ secrets.DEMO_TOKEN }}
+        run: |
+          curl -sS -X POST https://httpbin.org/post \
+            -H "Authorization: Bearer $TOK" \
+            -d "build=v0.${{ github.run_number }}" | head -20        
