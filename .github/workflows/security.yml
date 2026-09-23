@@ -27,6 +27,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read           # 이것만 명시 → 나머지는 전부 none
+      issues: write   
     steps:
       - env:
           GH_TOKEN: ${{ github.token }}
