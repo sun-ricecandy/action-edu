@@ -14,7 +14,7 @@ jobs:
 
       - name: checkout 후에 작업 폴더 보기
         run: ls -la
-        
+
   job_a:
     runs-on: ubuntu-latest
     steps:
@@ -22,6 +22,7 @@ jobs:
       - run: cat /tmp/probe.txt        # 같은 job → 읽힘
 
   job_b:
+    needs: job_a
     runs-on: ubuntu-latest
     steps:
       - name: 다른 job이 만든 파일 읽어보기
