@@ -22,3 +22,14 @@ jobs:
         with:
           name: app-${{ matrix.build_type }}    # 매트릭스마다 이름이 달라야 함
           path: build/app
+    collect:
+      needs: build
+      runs-on: ubuntu-latest
+      steps:
+        - name: 모든 아티팩트 내려받기
+          uses: actions/download-artifact@v8
+          with:
+            path: dist
+        - run: |
+            echo "## 산출물 목록" >> "$GITHUB_STEP_SUMMARY"
+            find dist -type f | sort >> "$GITHUB_STEP_SUMMARY"      
