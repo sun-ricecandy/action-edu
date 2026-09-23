@@ -1,0 +1,12 @@
+name: Lab6 self-hosted 테스트      # 다른 워크플로와 겹치지 않는 이름으로
+on:
+  workflow_dispatch:
+
+jobs:
+  on_prem:
+    runs-on: self-hosted
+    steps:
+      - run: |
+          echo "여기는 내 머신에서 돈다"
+          echo "러너 이름: ${{ runner.name }}"
+          hostname
