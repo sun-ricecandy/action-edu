@@ -1,0 +1,16 @@
+name: Lab1 첫 워크플로
+on:
+  workflow_dispatch:        # Actions 탭에서 수동 실행
+
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout 전에 작업 폴더 보기
+        run: ls -la
+
+      - name: 소스 가져오기
+        uses: actions/checkout@v7
+
+      - name: checkout 후에 작업 폴더 보기
+        run: ls -la
