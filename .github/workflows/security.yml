@@ -22,4 +22,17 @@ jobs:
         run: |
           curl -sS -X POST https://httpbin.org/post \
             -H "Authorization: Bearer $TOK" \
-            -d "build=v0.${{ github.run_number }}" | head -20        
+            -d "build=v0.${{ github.run_number }}" | head -20    
+  perm_fail:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read           # 이것만 명시 → 나머지는 전부 none
+    steps:
+      - env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if gh label create lab4-test --repo ${{ github.repository }} --force; then
+            echo "✅ 라벨 생성 성공"
+          else
+            echo "❌ 권한 부족으로 실패"
+          fi              
