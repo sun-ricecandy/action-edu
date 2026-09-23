@@ -8,15 +8,17 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        build_type:
+          - Debug
+          - Release
     steps:
       - uses: actions/checkout@v7
-      - name: 테스트
-        run: make test
-      - name: 빌드
-        run: make
-      - name: 산출물 업로드
-        uses: actions/upload-artifact@v7
+      - run: make test
+      - run: make BUILD_TYPE=${{ matrix.build_type }}
+      - uses: actions/upload-artifact@v7
         with:
-          name: app
+          name: app-${{ matrix.build_type }}    # 매트릭스마다 이름이 달라야 함
           path: build/app
-          retention-days: 7
