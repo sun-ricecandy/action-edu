@@ -11,3 +11,10 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - run: echo "빌드 실행됨 (src가 바뀜)"
+
+      - name: 일부러 실패
+        run: |
+          echo "여기까지는 정상"
+          exit 1
+      - name: 이 step은 실행될까
+        run: echo "앞이 실패하면 나는 건너뛴다"
