@@ -1,0 +1,19 @@
+name: Lab3 outputs
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.ver.outputs.number }}      # ② step 값을 job 밖으로 공개 (이름을 바꿔도 됨)
+    steps:
+      - id: ver                                      # ① id 가 있어야 steps.ver 로 참조 가능
+        run: echo "number=1.0.$GITHUB_RUN_NUMBER" >> "$GITHUB_OUTPUT"
+      - run: echo "같은 job 에서 = ${{ steps.ver.outputs.number }}"
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "다른 job 에서 = ${{ needs.build.outputs.version }}"   # ③ needs.<job>.outputs.<공개이름>
