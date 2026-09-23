@@ -14,3 +14,20 @@ jobs:
 
       - name: checkout 후에 작업 폴더 보기
         run: ls -la
+        
+  job_a:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "hello from A" > /tmp/probe.txt
+      - run: cat /tmp/probe.txt        # 같은 job → 읽힘
+
+  job_b:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 다른 job이 만든 파일 읽어보기
+        run: |
+          if [ -f /tmp/probe.txt ]; then
+            echo "읽힘 — 같은 러너";
+          else
+            echo "없음 — job이 다르면 러너도 다르다";
+          fi
