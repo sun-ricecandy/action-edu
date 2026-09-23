@@ -1,0 +1,22 @@
+name: Lab3 파이프라인
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: 테스트
+        run: make test
+      - name: 빌드
+        run: make
+      - name: 산출물 업로드
+        uses: actions/upload-artifact@v7
+        with:
+          name: app
+          path: build/app
+          retention-days: 7
